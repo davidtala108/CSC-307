@@ -1,10 +1,11 @@
 // backend.js
 import express from "express";
-
+import cors from "cors";
 
 const app = express();
 const port = 8000;
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -46,6 +47,7 @@ app.get("/users", (req, res) => {
     result = result.filter( user => user.job === job)
   }
   res.send({users_list: result});
+ 
 });
 const addUser = (user) => {
   users["users_list"].push(user);
@@ -58,13 +60,15 @@ app.delete("/users/:id", (req, res) => {
     res.status(404).send("Resource not found.");
   } else {
   const deletedUser = users.users_list.splice(result, 1)[0];
-  res.status(200).json(deletedUser); 
+  res.status(204).json(deletedUser); 
   }
 });
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
+  let ID = Math.random().toString();
+  userToAdd.id= ID;
   addUser(userToAdd);
-  res.send();
+  res.status(201).send(userToAdd); 
 });
 
 const users = {

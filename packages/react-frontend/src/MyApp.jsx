@@ -6,23 +6,8 @@ import Form from "./Form";
 
 function MyApp() {
   const [characters, setCharacters] = useState([
-    {
-      name: "Charlie",
-      job: "Janitor"
-    },
-    {
-      name: "Mac",
-      job: "Bouncer"
-    },
-    {
-      name: "Dee",
-      job: "Aspring actress"
-    },
-    {
-      name: "Dennis",
-      job: "Bartender"
-    }
   ]);
+  
   useEffect(() => {
     fetchUsers()
       .then((res) => res.json())
@@ -52,6 +37,11 @@ function MyApp() {
   function removeOneCharacter(id) {
     const promise = fetch(`http://localhost:8000/users/${id}`,
     {method: 'DELETE'})
+    .then ((res) => {
+      if (res.status != 204){
+        throw "failed"
+      }
+    })
     .then(() =>
       {
     setCharacters(characters.filter(character => character.id !== id));
@@ -60,7 +50,14 @@ function MyApp() {
   }
   function updateList(person) {
     postUser(person)
-    .then(() => setCharacters([...characters, person]))
+    .then((res) => {
+      if (res.status != 201){
+        throw "failed"
+      }else{
+        return res.json()
+      }
+    })
+    .then((a) => setCharacters([...characters, a]))
     .catch((error) => {
       console.log(error);
     });

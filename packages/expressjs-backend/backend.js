@@ -60,12 +60,12 @@ app.delete("/users/:id", (req, res) => {
     res.status(404).send("Resource not found.");
   } else {
   const deletedUser = users.users_list.splice(result, 1)[0];
-  res.status(204).json(deletedUser); 
+  res.status(204).send(); 
   }
 });
 app.post("/users", (req, res) => {
   const userToAdd = req.body;
-  let ID = Math.random().toString();
+  let ID = Math.floor(Math.random()*10000000).toString();
   userToAdd.id= ID;
   addUser(userToAdd);
   res.status(201).send(userToAdd); 

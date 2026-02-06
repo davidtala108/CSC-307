@@ -44,7 +44,7 @@ function MyApp() {
     })
     .then(() =>
       {
-    setCharacters(characters.filter(character => character.id !== id));
+    setCharacters(characters.filter(character => character._id !== id));
       });
     
   }
